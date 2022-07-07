@@ -8,6 +8,8 @@ let descripcion = document.querySelector('#descripcion');
 let imagen = document.querySelector('#imagen');
 let genero = document.querySelector('#genero');
 let formulario = document.querySelector('#formSerie');
+let btnCrearSerie = document.querySelector('#btnCrearSerie');
+
 const modalAdminSerie = new bootstrap.Modal(document.getElementById('modalSerie'));
 console.log(modalAdminSerie);
 
@@ -17,6 +19,10 @@ let listaSeries = JSON.parse(localStorage.getItem('listaSeriesKey')) || [];
 //tarea agregar validaciones a cada campo
 
 formulario.addEventListener('submit', crearSerie);
+btnCrearSerie.addEventListener('click', ()=>{
+    limpiarFormulario();
+    modalAdminSerie.show();
+})
 
 function crearSerie(e){
     e.preventDefault();
@@ -32,7 +38,7 @@ function crearSerie(e){
     //guardar la lista de series en localStorage
     guardarListaSeries();
     //cerrar modal que administra las series
-
+    modalAdminSerie.hide();
 }
 
 function limpiarFormulario(){
