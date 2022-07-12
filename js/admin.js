@@ -12,7 +12,6 @@ let btnCrearSerie = document.querySelector("#btnCrearSerie");
 const modalAdminSerie = new bootstrap.Modal(
   document.getElementById("modalSerie")
 );
-console.log(modalAdminSerie);
 
 //si hay algo en localStorage traer esos datos, si no hay nada listaSeries tiene que ser una []
 let listaSeries = JSON.parse(localStorage.getItem("listaSeriesKey")) || [];
@@ -39,10 +38,10 @@ function crearSerie(e) {
     imagen.value,
     genero.value
   );
-  console.log(nuevaSerie);
+
   //agregamos la serie al final del arreglo
   listaSeries.push(nuevaSerie);
-  console.log(listaSeries);
+
   //limpiar el formulario
   limpiarFormulario();
   //guardar la lista de series en localStorage
@@ -74,7 +73,7 @@ function cargarInicial() {
 }
 
 function crearFila(itemSerie) {
-  console.log(itemSerie);
+
   let tablaSeries = document.querySelector("#listaSeries");
   tablaSeries.innerHTML += ` <tr>
     <th scope="row">${itemSerie.codigo}</th>
@@ -85,7 +84,7 @@ function crearFila(itemSerie) {
     <td>${itemSerie.imagen}</td>
     <td>${itemSerie.genero}</td>
     <td>
-      <button class="btn btn-warning">
+      <button class="btn btn-warning" onclick='preparEdicionSerie("${itemSerie.codigo}")'>
         <i class="bi bi-pencil-square"></i>
       </button>
       <button class="btn btn-danger" onclick='borrarProducto("${itemSerie.codigo}")'>
@@ -97,7 +96,7 @@ function crearFila(itemSerie) {
 }
 
 window.borrarProducto = function (codigo) {
-  console.log(codigo);
+
   //preguntar al usuario si estoy segura de borrar
   Swal.fire({
     title: "Esta seguro de eliminar la serie",
@@ -114,7 +113,6 @@ window.borrarProducto = function (codigo) {
       let listaSeriesNueva = listaSeries.filter((serie)=> { return serie.codigo != codigo } );
       listaSeries = listaSeriesNueva;
       guardarListaSeries();
-      console.log(listaSeriesNueva)
       //actualizar la tabla
       borrarTabla();
       cargarInicial();
@@ -131,4 +129,19 @@ window.borrarProducto = function (codigo) {
 function borrarTabla(){
   let tbodySeries = document.querySelector('#listaSeries');
   tbodySeries.innerHTML ='';
+}
+
+window.preparEdicionSerie = function (codigoP) {
+  console.log(codigoP)
+  //cargar los datos de la serie a editar
+  let serieBuscada = listaSeries.find((serie)=>{return serie.codigo == codigoP});
+  console.log(serieBuscada.codigo);
+  //asignar los valores a cada input
+  codigo.value = serieBuscada.codigo;
+  titulo.value = serieBuscada.titulo;
+  descripcion.value = serieBuscada.descripcion;
+  imagen.value = serieBuscada.imagen;
+  genero.value = serieBuscada.genero;
+  //mostrar formulario de la ventana modal
+  modalAdminSerie.show();
 }
