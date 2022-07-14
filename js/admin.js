@@ -23,6 +23,9 @@ let listaSeries = JSON.parse(localStorage.getItem("listaSeriesKey")) || [];
 formulario.addEventListener("submit", guardarSerie);
 btnCrearSerie.addEventListener("click", () => {
   limpiarFormulario();
+  //considero crear una nueva serie
+  serieExistente= false;
+  console.log(serieExistente)
   modalAdminSerie.show();
 });
 
@@ -36,6 +39,9 @@ function guardarSerie(e){
   if(serieExistente){
     //aqui quiero modificar una serie existente
     console.log('aqui quiero modificar');
+    //validar los datos
+    //guardar la actualizacion
+    guardarEdicionSerie();
   }else{
     //aqui quiero crear una nueva serie
     crearSerie()
@@ -161,4 +167,28 @@ window.preparEdicionSerie = function (codigoP) {
   modalAdminSerie.show();
   // aqui modifico la variable existeSerie para poder editar
   serieExistente = true;
+  console.log(serieExistente);
+}
+
+function guardarEdicionSerie(){
+  //necesitamos la posicion de la serie dentro del arreglo
+  let posicionSerie = listaSeries.findIndex((serie)=> {return serie.codigo == codigo.value})
+  //modificamos los valores de la serie encontrada
+  listaSeries[posicionSerie].titulo = titulo.value;
+  listaSeries[posicionSerie].descripcion = descripcion.value;
+  listaSeries[posicionSerie].imagen = imagen.value;
+  listaSeries[posicionSerie].genero = genero.value;
+  //actualizar el localstorage
+  guardarListaSeries();
+  //actualizar la tabla
+  borrarTabla();
+  cargarInicial();
+  //indicar al usuario si se pudo realizar la accion
+  Swal.fire(
+    "Serie actualizada",
+    "La serie seleccionada fue correctamente actualizada",
+    "success"
+  );
+  //cerrar la ventana modal
+  modalAdminSerie.hide();
 }
